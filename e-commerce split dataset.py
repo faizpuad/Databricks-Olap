@@ -1,4 +1,9 @@
 # Databricks notebook source
+# MAGIC %sql
+# MAGIC Use hive_metastore.default
+
+# COMMAND ----------
+
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.getOrCreate()
@@ -6,7 +11,7 @@ print('spark session created.')
 
 # COMMAND ----------
 
-df = spark.sql('SELECT * FROM data_1_csv')
+df = spark.sql('SELECT * FROM online_retail')
 display(df)
 
 # COMMAND ----------
@@ -48,6 +53,13 @@ df_invoice.write.format("delta").saveAsTable("default.invoices")
 item_columns = ["StockCode","Description","UnitPrice","Quantity","InvoiceNo"]
 df_items = df.select(item_columns).drop_duplicates()
 display(df_items)
+
+# COMMAND ----------
+
+import os
+
+current_directory = os.path.abspath(os.getcwd())
+print(current_directory)
 
 # COMMAND ----------
 
